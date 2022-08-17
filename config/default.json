@@ -4,6 +4,10 @@
         "database": {
             "mongoUrl": " "
         },
+        "auth": {
+            "key": "some-key",
+            "tokenExpiresIn": "20000000"
+        },
         "resources": {
             "name_api": {
                 "apiUrl": "value",

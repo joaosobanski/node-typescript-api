@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 export enum EBeachPosition {
   S = 'S',
@@ -13,6 +13,7 @@ export interface IBeach {
   position: EBeachPosition;
   lat: number;
   lng: number;
+  user: string;
 }
 
 const schema = new mongoose.Schema(
@@ -21,6 +22,7 @@ const schema = new mongoose.Schema(
     lng: { type: Number, required: true },
     name: { type: String, required: true },
     position: { type: String, required: true },
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   },
   {
     toJSON: {
