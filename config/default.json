@@ -1,0 +1,18 @@
+{
+    "App": {
+        "port": "3003",
+        "database": {
+            "mongoUrl": " "
+        },
+        "resources": {
+            "name_api": {
+                "apiUrl": "value",
+                "apiToken": "value"
+            }
+        },
+        "logger": {
+            "enabled": true,
+            "level": "info"
+        }
+    }
+}
