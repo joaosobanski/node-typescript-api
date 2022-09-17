@@ -19,11 +19,11 @@ export class UsersController extends BaseController {
 
   @Post('authenticate')
   public async authenticate(req: Request, res: Response): Promise<Response> {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ username: req.body.username });
     if (!user) {
       return res.status(401).send({
         code: 401,
-        error: 'User not found!',
+        error: 'Usuário não econtrado!',
       });
     }
     if (
@@ -31,7 +31,7 @@ export class UsersController extends BaseController {
     ) {
       return res
         .status(401)
-        .send({ code: 401, error: 'Password does not match!' });
+        .send({ code: 401, error: 'Senha inválida!' });
     }
     const token = AuthService.generateToken(user.toJSON());
 
