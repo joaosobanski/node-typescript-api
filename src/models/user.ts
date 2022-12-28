@@ -1,5 +1,8 @@
 import AuthService from '../services/auth';
-import mongoose, { Document, Model } from 'mongoose';
+import mongoose, {
+  Document,
+  Model, CallbackWithoutResultAndOptionalError
+} from 'mongoose';
 
 export interface IUser {
   _id?: string;
@@ -54,8 +57,12 @@ schema.path('username').validate(
   CUSTOM_VALIDATION.DUPLICATED
 );
 
-schema.pre('save', async function (): Promise<void> {
+schema.pre('save', testepre);
+
+async function testepre(this: any): Promise<void> {
+  console.log("presave testepre", this)
   if (!this.password || !this.isModified('password')) {
+    console.log("presave2 testepre")
     return;
   }
   try {
@@ -64,6 +71,16 @@ schema.pre('save', async function (): Promise<void> {
   } catch (err) {
     console.error(`Error hashing the password for the user ${this.name}`, err);
   }
-});
+}
+
+
+schema.post('save', teste)
+
+function teste(doc: IUser, next: CallbackWithoutResultAndOptionalError) {
+  console.log('post1testesave teste', doc);
+
+  next();
+};
+
 
 export const User = mongoose.model<IUser>('User', schema);
