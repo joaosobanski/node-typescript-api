@@ -1,64 +1,71 @@
+
 import { Server } from '@overnightjs/core';
 import { Application } from 'express';
 import bodyParser from 'body-parser';
-import * as database from './database';
 import * as http from 'http';
-import logger from './logger';
-import { UsersController } from './controllers/users';
+import cors from 'cors';
+import database from '@src/middleware/database';
+import logger from '@utils/logger'
+import UsersController from '@controllers/users.controller';
+import CategoryController from '@controllers/category.controller';
+
+const allowedOrigins = ['http://localhost:3000'];
+
+const options: cors.CorsOptions = {
+  origin: allowedOrigins
+};
 
 export class SetupServer extends Server {
-    private server?: http.Server;
-    /*
-     * same as this.port = port, declaring as private here will
-     * add the port variable to the SetupServer instance
-     */
-    constructor(private port = 3003) {
-        console.log(`api rest runnin in port:${port}`)
-        super();
-    }
+  private server?: http.Server;
+  constructor(private port = 3003) {
+    super();
+    logger.info(`Get your coffee at the port:${port}`);
+  }
 
-    /*
-     * We use a different method to init instead of using the constructor
-     * this way we allow the server to be used in tests and normal initialization
-     */
-    public async init(): Promise<void> {
-        this.setupExpress();
-        this.setupControllers();
-        //start db
-        await this.databaseSetup();
-    }
+  public async init(): Promise<void> {
+    this.setupExpress();
+    this.setupControllers();
+    await this.setupDatabase();
+    this.setupJobs()
+  }
 
-    private setupExpress(): void {
-        this.app.use(bodyParser.json());
-        this.setupControllers();
-    }
+  private setupExpress(): void {
+    this.app.use(cors(options));
+    this.app.use(bodyParser.json());
+    this.setupControllers();
+  }
 
-    private setupControllers(): void {
-        const usersController = new UsersController();
+  private setupJobs(): void {
 
-        this.addControllers(
-            [
-                usersController,
-            ]
-        )
-    }
+  }
 
-    public getApp(): Application {
-        return this.app;
-    }
+  private setupControllers(): void {
+    const usersController = new UsersController();
+    const categoriasController = new CategoryController();
 
+    this.addControllers(
+      [
+        usersController,
+        categoriasController
+      ]
+    )
+  }
 
-    private async databaseSetup(): Promise<void> {
-        await database.connect();
-    }
+  public getApp(): Application {
+    return this.app;
+  }
 
-    public async close(): Promise<void> {
-        await database.close();
-    }
+  private async setupDatabase(): Promise<void> {
+    await database.connect();
+  }
 
-    public start(): void {
-        this.server = this.app.listen(this.port, () => {
-            logger.info('Server listening on port: ' + this.port);
-        });
-    }
+  public async close(): Promise<void> {
+    await database.close();
+  }
+
+  public start(): void {
+    this.server = this.app.listen(this.port, () => {
+      logger.info('Have a good appetite and good work!');
+    });
+  }
 }

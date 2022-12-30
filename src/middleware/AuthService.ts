@@ -1,6 +1,5 @@
 import { IUser } from '@src/models/user';
 import bcrypt from 'bcrypt';
-import config from 'config';
 import jwt from 'jsonwebtoken';
 
 //version of the user that is send to via API and decoded from the Json Web Token
@@ -24,12 +23,12 @@ export default class AuthService {
   }
 
   public static generateToken(payload: object): string {
-    return jwt.sign(payload, config.get('App.auth.key'), {
-      expiresIn: config.get('App.auth.tokenExpiresIn'),
+    return jwt.sign(payload, process.env.SECRET as string, {
+      expiresIn: process.env.EXPIRES,
     });
   }
 
   public static decodeToken(token: string): DecodedUser {
-    return jwt.verify(token, config.get('App.auth.key')) as DecodedUser;
+    return jwt.verify(token, process.env.SECRET as string) as DecodedUser;
   }
 }

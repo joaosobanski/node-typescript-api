@@ -7,7 +7,7 @@
       "es2019"
     ],
     "sourceMap": true,
-    "outDir": "dist",
+    "outDir": "build",
     "rootDir": ".",
     "strict": true,
     "noImplicitAny": true,
@@ -25,18 +25,43 @@
       "@src/*": [
         "./src/*"
       ],
+      "@controllers/*": [
+        "./src/controllers/*"
+      ],
+      "@services/*": [
+        "./src/services/*"
+      ],
+      "@routes/*": [
+        "./src/routes/*"
+      ],
+      "@interfaces/*": [
+        "./src/interfaces/*"
+      ],
+      "@models/*": [
+        "./src/models/*"
+      ],
+      "@modules/*": [
+        "./src/modules/*"
+      ],
+      "@utils/*": [
+        "./src/utils/*"
+      ],
+      "@jobs/*": [
+        "./src/jobs/*"
+      ]
     },
     "rootDirs": [
       "./src",
+      "./test"
     ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
   "include": [
-    "./src/**/*.ts",
+    "src/*"
   ],
   "exclude": [
     "./node_modules/*",
-    "dist"
+    "build"
   ]
 }
